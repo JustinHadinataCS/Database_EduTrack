@@ -1,4 +1,3 @@
-import Header from "../component/Header";
 import RightLeftContainer from "../component/RightLeftContainer";
 import Sidebar from "../component/Sidebar";
 import { SchoolProvider } from "../contexts/SchoolContext";

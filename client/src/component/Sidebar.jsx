@@ -2,28 +2,28 @@ import React, { useState } from "react";
 import GroupsIcon from "@mui/icons-material/Groups";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import SchoolIcon from "@mui/icons-material/School";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import { useNavigate } from "react-router-dom";
 import MainTitle from "./MainTitle";
 import SideItem from "./SideItem";
 
 function Sidebar() {
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [indicatorStyle, setIndicatorStyle] = useState({
-    top: 0,
-    opacity: 0,
+    top: 147,
+    opacity: 1,
   });
   const navigate = useNavigate();
 
   const menuItems = [
+    { icon: <DashboardIcon />, context: "Dashboard", path: "/dashboard" },
     { icon: <GroupsIcon />, context: "Students", path: "/student" },
-    { icon: <AccountCircleIcon />, context: "Teachers" },
+    { icon: <AccountCircleIcon />, context: "Teachers", path: "/teacher"  },
     { icon: <AutoStoriesIcon />, context: "Courses", path: "/course" },
-    { icon: <SchoolIcon />, context: "Classroom" },
-    { icon: <EmojiEventsIcon />, context: "Grade" },
-    { icon: <CalendarMonthIcon />, context: "Attendance" },
+    { icon: <PendingActionsIcon />, context: "Attendance", path: "/attendance" },
+    { icon: <CalendarMonthIcon />, context: "Schedule", path: "/attendance" }
   ];
 
   const handleItemClick = (index, event, path) => {
@@ -44,8 +44,8 @@ function Sidebar() {
   return (
     <div className="bg-[#010101] w-1/6 border-r text-white border-[#2e2e2e] flex flex-col relative">
       <MainTitle
-        onClick={() => setActiveIndex(null)}
-        setIndicatorStyle={() => setIndicatorStyle({ top: 0, opacity: 0 })}
+        onClick={() => setActiveIndex(0)}
+        setIndicatorStyle={() => setIndicatorStyle({ top: 147, opacity: 1})}
       />
 
       <div

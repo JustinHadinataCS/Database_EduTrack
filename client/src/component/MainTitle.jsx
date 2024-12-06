@@ -5,7 +5,7 @@ function MainTitle({ onClick, setIndicatorStyle }) {
   const navigate = useNavigate();
   function handleButton(e) {
     e.preventDefault();
-    navigate("/");
+    navigate("/dashboard");
     onClick();
     setIndicatorStyle();
   }

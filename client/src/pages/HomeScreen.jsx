@@ -3,7 +3,6 @@ import { useSchool } from "../contexts/SchoolContext";
 
 function HomeScreen() {
   const { totals, attendance } = useSchool();
-  console.log(attendance);
   return (
     <div className="grid grid-cols-1 gap-4 mt-8 gap-x-6 mx-auto md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <TotalCard count={totals.totalStudents} label="Total Students" />
