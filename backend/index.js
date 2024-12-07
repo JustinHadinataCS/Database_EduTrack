@@ -27,7 +27,11 @@ app.use(session({
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
+<<<<<<< Updated upstream
   password: "1234",
+=======
+  password: "password",
+>>>>>>> Stashed changes
   database: "school",
 });
 
