@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import GroupsIcon from "@mui/icons-material/Groups";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -19,11 +18,10 @@ function Sidebar() {
 
   const menuItems = [
     { icon: <DashboardIcon />, context: "Dashboard", path: "/dashboard" },
-    { icon: <GroupsIcon />, context: "Students", path: "/student" },
-    { icon: <AccountCircleIcon />, context: "Teachers", path: "/teacher"  },
+    { icon: <GroupsIcon />, context: "My Class", path: "/class" },
     { icon: <AutoStoriesIcon />, context: "Courses", path: "/course" },
     { icon: <PendingActionsIcon />, context: "Attendance", path: "/attendance" },
-    { icon: <CalendarMonthIcon />, context: "Schedule", path: "/attendance" }
+    { icon: <CalendarMonthIcon />, context: "Schedule", path: "/schedule" }
   ];
 
   const handleItemClick = (index, event, path) => {

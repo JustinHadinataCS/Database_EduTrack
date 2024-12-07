@@ -7,7 +7,7 @@ function HomePage() {
   return (
     <SchoolProvider>
       <div className="flex h-screen bg-black">
-        <Sidebar />
+        <Sidebar/>
         <RightLeftContainer>
           <Outlet />
         </RightLeftContainer>

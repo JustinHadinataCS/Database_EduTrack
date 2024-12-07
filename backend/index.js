@@ -24,6 +24,8 @@ app.use(session({
   }
 }))
 
+
+// CONNECTING TO MYSQL SERVER
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -31,6 +33,7 @@ const db = mysql.createConnection({
   database: "school",
 });
 
+// FUNCTION TO GIVE QUERIES TO MYSQL
 const queryDB = (query) => {
   return new Promise((resolve, reject) => {
     db.query(query, (err, data) => {
@@ -40,6 +43,7 @@ const queryDB = (query) => {
   });
 };
 
+// BACKEND TEST
 app.get("/", (req, res) => {
   res.json("Hello this is the backend");
 });
@@ -51,7 +55,8 @@ app.post("/login", (req, res) => {
     sc.student_email, 
     sc.student_password, 
     s.first_name, 
-    s.last_name 
+    s.last_name,
+    s.classID 
   FROM 
     student_credentials sc
   JOIN 
@@ -82,7 +87,8 @@ app.post("/login", (req, res) => {
     if(studentData.length > 0){
       req.session.firstname = studentData[0].first_name;
       req.session.lastname = studentData[0].last_name;
-      req.session.usertype = "Student"
+      req.session.classID = studentData[0].classID;
+      req.session.usertype = "Student";
       return res.json({Login: true});
     } 
     
@@ -111,16 +117,80 @@ app.get("/login", (req, res) => {
   }
 });
 
-//GET METHOD TOTAL
-app.get("/students/total", async (req, res) => {
+//GET METHOD TO DISPLAY CLASS INFORMATION
+app.get("/class/data", async (req, res) => {
+  const query = `
+  SELECT 
+    s.first_name AS student_firstname, 
+    s.last_name AS student_lastname, 
+    s.StudentID AS student_id,
+    t.first_name AS teacher_firstname, 
+    t.last_name AS teacher_lastname, 
+    c.class_name class_name
+  FROM 
+    students s
+  JOIN
+    class c
+  ON
+    c.ClassID = s.ClassID
+  JOIN
+    teachers t
+  ON
+    t.TeacherID = c.TeacherID
+  WHERE 
+    s.ClassID = ?`;
+
+  const classID = req.session.classID
+
+  db.query(query, [classID], (err, classData) => {
+    if (err) return res.json({ message: "Server Error" });
+
+    if (classData.length > 0) {
+      const response = {
+        students: classData.map(row => ({
+          firstName: row.student_firstname,
+          lastName: row.student_lastname,
+          id: row.student_id,
+        })),
+        teacher: {
+          firstName: classData[0].teacher_firstname,
+          lastName: classData[0].teacher_lastname,
+        },
+        className: classData[0].class_name,
+      };
+
+      return res.json(response);
+    }
+    else{
+      return res.json({});
+    }
+  })
+   
+});
+
+/* app.get("/class/teacher", async (req, res) => {
   try {
-    const query = "SELECT COUNT(*) AS totalStudents FROM students";
+    const query = "SELECT first_name, last_name FROM students WHERE ";
     const result = await queryDB(query);
     res.json(result[0].totalStudents);
-  } catch (err) {
+  } 
+  
+  catch (err) {
     res.status(500).json(err);
   }
 });
+
+app.get("/class/teacher", async (req, res) => {
+  try {
+    const query = "SELECT first_name, last_name FROM students WHERE ";
+    const result = await queryDB(query);
+    res.json(result[0].totalStudents);
+  } 
+  
+  catch (err) {
+    res.status(500).json(err);
+  }
+}); */
 
 // Route to get total teachers
 app.get("/teachers/total", async (req, res) => {
