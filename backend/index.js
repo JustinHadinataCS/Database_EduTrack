@@ -70,13 +70,18 @@ app.post("/login", (req, res) => {
     tc.teacher_email, 
     tc.teacher_password, 
     t.first_name, 
-    t.last_name 
+    t.last_name,
+    c.classID
   FROM 
     teacher_credentials tc
   JOIN 
     teachers t 
   ON 
     tc.TeacherID = t.TeacherID
+  JOIN
+    class c
+  ON
+    tc.TeacherID = c.TeacherID
   WHERE 
     tc.teacher_email = ? AND tc.teacher_password = ?`;
   
@@ -97,8 +102,9 @@ app.post("/login", (req, res) => {
       if (teacherData.length > 0) {
         req.session.firstname = teacherData[0].first_name;
         req.session.lastname = teacherData[0].last_name;
+        req.session.classID = teacherData[0].classID;
         req.session.usertype = "Teacher";
-        return res.json({Login: true,});
+        return res.json({Login: true});
       }
       else{
         return res.json({Login: false});
@@ -118,30 +124,64 @@ app.get("/login", (req, res) => {
 
 //GET METHOD TO DISPLAY CLASS INFORMATION
 app.get("/class/data", async (req, res) => {
-  const query = `
-  SELECT 
-    s.first_name AS student_firstname, 
-    s.last_name AS student_lastname, 
-    s.StudentID AS student_id,
-    t.first_name AS teacher_firstname, 
-    t.last_name AS teacher_lastname, 
-    c.class_name class_name
-  FROM 
-    students s
-  JOIN
-    class c
-  ON
-    c.ClassID = s.ClassID
-  JOIN
-    teachers t
-  ON
-    t.TeacherID = c.TeacherID
-  WHERE 
-    s.ClassID = ?`;
 
-  const classID = req.session.classID
+  let query = "";
+  let queryID = "";
 
-  db.query(query, [classID], (err, classData) => {
+  // QUERY FOR STUDENTS
+  if(req.session.usertype == "Student"){
+    query = `
+    SELECT 
+      s.first_name AS student_firstname, 
+      s.last_name AS student_lastname, 
+      s.StudentID AS student_id,
+      t.first_name AS teacher_firstname, 
+      t.last_name AS teacher_lastname, 
+      c.class_name class_name
+    FROM 
+      students s
+    JOIN
+      class c
+    ON
+      c.ClassID = s.ClassID
+    JOIN
+      teachers t
+    ON
+      t.TeacherID = c.TeacherID
+    WHERE 
+      s.ClassID = ?`;
+
+    queryID = req.session.classID
+  }
+
+  // QUERY FOR TEACHERS
+  else{
+    query = `
+    SELECT 
+      s.first_name AS student_firstname, 
+      s.last_name AS student_lastname, 
+      s.StudentID AS student_id,
+      t.first_name AS teacher_firstname, 
+      t.last_name AS teacher_lastname, 
+      c.class_name class_name
+    FROM 
+      students s
+    JOIN
+      class c
+    ON
+      c.ClassID = s.ClassID
+    JOIN
+      teachers t
+    ON
+      t.TeacherID = c.TeacherID
+    WHERE 
+      t.TeacherID = ?`;
+    
+    queryID = req.session.classID
+    console.log(queryID)
+  }
+
+  db.query(query, [queryID], (err, classData) => {
     if (err) return res.json({ message: "Server Error" });
 
     if (classData.length > 0) {
