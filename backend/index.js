@@ -150,8 +150,6 @@ app.get("/class/data", async (req, res) => {
       t.TeacherID = c.TeacherID
     WHERE 
       s.ClassID = ?`;
-
-    queryID = req.session.classID
   }
 
   // QUERY FOR TEACHERS
@@ -176,10 +174,9 @@ app.get("/class/data", async (req, res) => {
       t.TeacherID = c.TeacherID
     WHERE 
       t.TeacherID = ?`;
-    
-    queryID = req.session.classID
-    console.log(queryID)
   }
+
+  queryID = req.session.classID
 
   db.query(query, [queryID], (err, classData) => {
     if (err) return res.json({ message: "Server Error" });
@@ -207,65 +204,59 @@ app.get("/class/data", async (req, res) => {
    
 });
 
-/* app.get("/class/teacher", async (req, res) => {
-  try {
-    const query = "SELECT first_name, last_name FROM students WHERE ";
-    const result = await queryDB(query);
-    res.json(result[0].totalStudents);
-  } 
-  
-  catch (err) {
-    res.status(500).json(err);
-  }
-});
+app.get("/course/data", async (req, res) => {
+  let query = "";
+  let queryID = "";
 
-app.get("/class/teacher", async (req, res) => {
-  try {
-    const query = "SELECT first_name, last_name FROM students WHERE ";
-    const result = await queryDB(query);
-    res.json(result[0].totalStudents);
-  } 
-  
-  catch (err) {
-    res.status(500).json(err);
+  // QUERY FOR STUDENTS
+  if(req.session.usertype == "Student"){
+    query = `
+    SELECT DISTINCT 
+      c.CourseName, 
+      t.first_name, 
+      t.last_name
+    FROM 
+      ClassSchedule cs
+    JOIN 
+      TeacherCourseAssignment tc 
+    ON 
+      cs.TeacherCourseID = tc.TeacherCourseID
+    JOIN 
+      Courses c 
+    ON 
+      tc.CourseID = c.CourseID
+    JOIN
+      teachers t
+    ON
+      t.TeacherID = c.TeacherID
+    WHERE
+      cs.ClassID = ?`;
   }
-}); */
 
-// Route to get total teachers
-app.get("/teachers/total", async (req, res) => {
-  try {
-    const query = "SELECT COUNT(*) AS totalTeachers FROM teachers";
-    const result = await queryDB(query);
-    res.json(result[0].totalTeachers);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// Route to get attendance overview
-app.get("/attendance/overview", async (req, res) => {
-  try {
-    const query = `
-      SELECT 
-        ROUND(SUM(CASE WHEN Attendance_Status = true THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS percentPresent,
-        ROUND(SUM(CASE WHEN Attendance_Status = false THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS percentAbsent
-      FROM Attendance
+  // QUERY FOR TEACHERS
+  else{
+    query = `
     `;
-    const result = await queryDB(query);
-    res.json(result[0]);
-  } catch (err) {
-    res.status(500).json(err);
   }
+
+  queryID = req.session.classID
+
+  db.query(query, [queryID], (err, courseData) => {
+    if (err) return res.json({ message: "Server Error" });
+
+    if (courseData.length > 0) {
+      const response = {
+        
+      };
+
+      return res.json(response);
+    }
+    else{
+      return res.json({});
+    }
+  })
+
 });
-
-// app.get("/students/total", (req, res) => {
-//   const q = "SELECT COUNT(*) AS totalStudents FROM students";
-
-//   db.query(q, (err, data) => {
-//     if (err) return res.json(err);
-//     return res.json(data[0].totalStudents);
-//   });
-// });
 
 app.listen(8800, () => {
   console.log("Connected to backend!");
