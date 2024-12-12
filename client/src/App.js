@@ -10,6 +10,7 @@ import HomeScreen from "./pages/HomeScreen";
 import ClassContainer from "./pages/ClassContainer";
 import CourseContainer from "./pages/CourseContainer";
 import AttendanceContainer from "./pages/AttendanceContainer.jsx";
+import ScheduleContainer from "./pages/ScheduleContainer.jsx"
 import Login from "./pages/login.jsx";
 import SessionList from "./component/SessionList.jsx";
 
@@ -42,7 +43,7 @@ function App() {
             },
           ],
         },
-        { path: "schedule", element: <AttendanceContainer /> },
+        { path: "schedule", element: <ScheduleContainer /> },
       ],
     },
   ]);
