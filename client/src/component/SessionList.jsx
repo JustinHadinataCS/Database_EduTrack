@@ -1,36 +1,38 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useAttendance } from "../contexts/AttendanceContext";
-import SessionDetail from "./SessionDetail";
+import React, { useEffect, useState } from "react";
+import { useParams, useOutletContext } from "react-router-dom";
 
 function SessionList() {
   const { courseName } = useParams();
-  const [session, setSession] = useState(null);
-  const { attendanceData } = useAttendance();
+  const { attendanceData } = useOutletContext();
+  const [filteredSessions, setFilteredSessions] = useState([]);
 
   useEffect(() => {
-    const foundCourse = attendanceData.find(
-      (c) => c.course_name.toLowerCase() === courseName.toLowerCase()
-    );
-    setSession(foundCourse);
-  }, [courseName, attendanceData]);
+    if (!attendanceData || attendanceData.length === 0) {
+      return;
+    }
 
-  if (!session) {
-    return <div>Loading...</div>;
+    const course = attendanceData.find(
+      (item) => item.course_name.toLowerCase() === courseName.toLowerCase()
+    );
+
+    if (course && course.sessions) {
+      setFilteredSessions(course.sessions);
+    } else {
+      setFilteredSessions([]);
+    }
+  }, [attendanceData, courseName]);
+
+  if (filteredSessions.length === 0) {
+    return <div>No sessions available for {courseName}</div>;
   }
 
   return (
-    <div class="flex bg-[#1d1d1d] flex-col rounded-lg">
-      <div className="flex text-white p-5 gap-x-5">
-        <p>Session</p>
-        <p>Attendance</p>
-      </div>
-      {attendanceData.map((item, index) => (
-        <SessionDetail
-          sessionNumber={item.session.session_number}
-          attendanceStatus={item.session.attendance_status}
-          key={index}
-        />
+    <div>
+      {filteredSessions.map((session, index) => (
+        <div key={index} className="flex justify-between text-white px-5 py-2">
+          <p>{session.session_number || `Session ${index + 1}`}</p>
+          <p>{session.attendance_status ? "✅" : "❌"}</p>
+        </div>
       ))}
     </div>
   );
