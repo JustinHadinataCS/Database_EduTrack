@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSchool } from "../contexts/SchoolContext";
 import Dropdown from "./Dropdown";
+import { Outlet } from "react-router-dom";
 
 const AttendanceContainer = () => {
   const [attendanceData, setAttendanceData] = useState([]);
   const { userData } = useSchool();
-  console.log(attendanceData);
 
   useEffect(() => {
     const fetchAttendance = async () => {
@@ -40,48 +40,31 @@ const AttendanceContainer = () => {
   }, [userData]);
 
   return (
-    <div class="flex flex-col gap-y-5 px-10 py-5">
-      <div class="flex">
-        <Dropdown>Course</Dropdown>
+    <div className="flex flex-col gap-y-5 px-10 py-5">
+      <div className="flex">
+        <Dropdown attendanceData={attendanceData} userData={userData} />
       </div>
-      <div class="flex p-4 px-8  gap-x-10 rounded-lg bg-[#1d1d1d]">
+      <div className="flex p-4 px-8 gap-x-10 rounded-lg bg-[#1d1d1d]">
         <h1 className="flex text-[#3ECF8E] text-[25px] flex-col justify-center">
           Summary
         </h1>
-        <div className="flex  justify-between w-2/4">
-          {" "}
+        <div className="flex justify-between w-2/4">
           <div className="flex flex-col justify-start">
-            <p className="text-white text-lg">Total Session</p>
+            <p className="text-white text-lg">Total Sessions</p>
             <p className="text-[#3ECF8E]">20</p>
           </div>
           <div className="flex flex-col justify-start">
-            <p className="text-white text-lg">Total Session</p>
+            <p className="text-white text-lg">Total Sessions</p>
             <p className="text-[#3ECF8E]">20</p>
           </div>
           <div className="flex flex-col justify-start">
-            <p className="text-white text-lg">Total Session</p>
+            <p className="text-white text-lg">Total Sessions</p>
             <p className="text-[#3ECF8E]">20</p>
           </div>
         </div>
       </div>
-      <div class="flex bg-[#1d1d1d] flex-col rounded-lg">
-        <div className="flex text-white p-5 gap-x-5">
-          <p>Session</p>
-          <p>Attendance</p>
-        </div>
-
-        <div className="flex text-white px-5 justify-between py-2 gap-x-5 w-2/12">
-          <p>Session 1</p>
-          <div className="flex justify-start">
-            <p>❌</p>
-          </div>
-        </div>
-        <div className="flex text-white px-5 justify-between py-2 w-2/12 gap-x-5">
-          <p>Session 2</p>
-          <div className="flex justify-start">
-            <p>✅</p>
-          </div>
-        </div>
+      <div className="flex bg-[#1d1d1d] flex-col rounded-lg">
+        <Outlet context={{ attendanceData }} />
       </div>
     </div>
   );

@@ -17,11 +17,14 @@ function Sidebar() {
     top: 147,
     opacity: 1,
   });
+
   const { userData } = useSchool();
-  const [attendanceData, setAttendanceData] = useState([]);
-  const { attendanceDate } = useAttendance();
+  const { attendanceData } = useAttendance();
   const navigate = useNavigate();
 
+  if (!attendanceData || attendanceData.length === 0) {
+    return <div>Loading...</div>;
+  }
   const menuItems = [
     { icon: <DashboardIcon />, context: "Dashboard", path: "/dashboard" },
     { icon: <GroupsIcon />, context: "My Class", path: "/class" },
@@ -29,7 +32,7 @@ function Sidebar() {
     {
       icon: <PendingActionsIcon />,
       context: "Attendance",
-      path: `/attendance?studentId=${userData.StudentID}/:${attendanceDate.course_name}`,
+      path: `/attendance?studentId=${userData.StudentID}/${attendanceData[0].course_name}`,
     },
     { icon: <CalendarMonthIcon />, context: "Schedule", path: "/schedule" },
   ];
