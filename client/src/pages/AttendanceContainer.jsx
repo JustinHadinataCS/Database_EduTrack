@@ -42,7 +42,7 @@ const AttendanceContainer = () => {
   return (
     <div class="flex flex-col gap-y-5 px-10 py-5">
       <div class="flex">
-        <Dropdown>Course</Dropdown>
+        {/* <Dropdown>Course</Dropdown> */}
       </div>
       <div class="flex p-4 px-8  gap-x-10 rounded-lg bg-[#1d1d1d]">
         <h1 className="flex text-[#3ECF8E] text-[25px] flex-col justify-center">

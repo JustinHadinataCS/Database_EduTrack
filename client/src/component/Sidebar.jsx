@@ -29,7 +29,7 @@ function Sidebar() {
     {
       icon: <PendingActionsIcon />,
       context: "Attendance",
-      path: `/attendance?studentId=${userData.StudentID}/:${attendanceDate.course_name}`,
+/*       path: `/attendance?studentId=${userData.StudentID}/:${attendanceDate.course_name}`, */
     },
     { icon: <CalendarMonthIcon />, context: "Schedule", path: "/schedule" },
   ];
