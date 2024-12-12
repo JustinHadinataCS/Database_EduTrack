@@ -2,6 +2,7 @@ import { useSchool } from "../contexts/SchoolContext";
 
 function Header() {
   const { userData } = useSchool();
+  console.log(userData);
 
   if (!userData || !userData.firstname || !userData.lastname) {
     return (
@@ -30,8 +31,11 @@ function Header() {
         </div>
         <span className="text-[#FFFFFF] text-base font-normal">
           <div className="flex gap-x-1">
-            {userData.firstname}{" "}{userData.lastname}{" | "}
-            <span className="text-[#3ECF8E] font-bold">{userData.usertype}</span>
+            {userData.firstname} {userData.lastname}
+            {" | "}
+            <span className="text-[#3ECF8E] font-bold">
+              {userData.usertype}
+            </span>
           </div>
         </span>
       </div>
