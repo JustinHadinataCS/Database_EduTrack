@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useSchool } from "../contexts/SchoolContext";
+import { useParams, Outlet } from "react-router-dom";
 import Dropdown from "./Dropdown";
-import { Outlet } from "react-router-dom";
 
 const AttendanceContainer = () => {
   const [attendanceData, setAttendanceData] = useState([]);
   const { userData } = useSchool();
+  const { courseName } = useParams(); // Get course name from URL
+
+  // Calculate dynamic values
+  const courseData = attendanceData.find(
+    (course) => course.course_name.toLowerCase() === courseName?.toLowerCase()
+  );
+
+  const totalSessions = courseData?.sessions?.length || 0;
+  const totalAttendance =
+    courseData?.sessions?.filter((session) => session.attendance_status === 1)
+      .length || 0;
+  const totalAbsent = totalSessions - totalAttendance;
 
   useEffect(() => {
     const fetchAttendance = async () => {
@@ -51,15 +63,15 @@ const AttendanceContainer = () => {
         <div className="flex justify-between w-2/4">
           <div className="flex flex-col justify-start">
             <p className="text-white text-lg">Total Sessions</p>
-            <p className="text-[#3ECF8E]">20</p>
+            <p className="text-[#3ECF8E]">{totalSessions}</p>
           </div>
           <div className="flex flex-col justify-start">
-            <p className="text-white text-lg">Total Sessions</p>
-            <p className="text-[#3ECF8E]">20</p>
+            <p className="text-white text-lg">Total Attendance</p>
+            <p className="text-[#3ECF8E]">{totalAttendance}</p>
           </div>
           <div className="flex flex-col justify-start">
-            <p className="text-white text-lg">Total Sessions</p>
-            <p className="text-[#3ECF8E]">20</p>
+            <p className="text-white text-lg">Total Absent</p>
+            <p className="text-[#3ECF8E]">{totalAbsent}</p>
           </div>
         </div>
       </div>

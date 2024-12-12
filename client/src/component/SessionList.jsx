@@ -28,10 +28,23 @@ function SessionList() {
 
   return (
     <div>
+      <div className="flex text-white px-5 justify-between py-2 gap-x-5 w-2/12">
+        <p>Session</p>
+        <div className="flex justify-start">
+          <p>Attendance</p>
+        </div>
+      </div>
       {filteredSessions.map((session, index) => (
-        <div key={index} className="flex justify-between text-white px-5 py-2">
-          <p>{session.session_number || `Session ${index + 1}`}</p>
-          <p>{session.attendance_status ? "✅" : "❌"}</p>
+        <div
+          key={index}
+          className="flex justify-between text-white px-5 py-2 w-2/12"
+        >
+          <div>
+            <p>{session.session_number || `Session ${index + 1}`}</p>
+          </div>
+          <div className="flex justify-start">
+            <p>{session.attendance_status ? "✅" : "❌"}</p>
+          </div>
         </div>
       ))}
     </div>
