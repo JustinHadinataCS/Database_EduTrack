@@ -56,27 +56,29 @@ const AttendanceContainer = () => {
       <div className="flex">
         <Dropdown attendanceData={attendanceData} userData={userData} />
       </div>
-      <div className="flex p-4 px-8 gap-x-10 rounded-lg bg-[#1d1d1d]">
-        <h1 className="flex text-[#3ECF8E] text-[25px] flex-col justify-center">
-          Summary
+
+      <div className="grid grid-cols-[1fr_3fr] p-4 px-8 gap-x-10 rounded-lg bg-[#1d1d1d]">
+        <h1 className="flex text-[#3ECF8E] text-[25px] items-center">
+          Attendance Summary
         </h1>
-        <div className="flex justify-between w-2/4">
+        <div className="flex justify-between px-8">
           <div className="flex flex-col justify-start">
             <p className="text-white text-lg">Total Sessions</p>
-            <p className="text-[#3ECF8E]">{totalSessions}</p>
+            <p className="text-[#3ECF8E] text-3xl">{totalSessions}</p>
           </div>
           <div className="flex flex-col justify-start">
             <p className="text-white text-lg">Total Attendance</p>
-            <p className="text-[#3ECF8E]">{totalAttendance}</p>
+            <p className="text-[#3ECF8E] text-3xl">{totalAttendance}</p>
           </div>
           <div className="flex flex-col justify-start">
-            <p className="text-white text-lg">Total Absent</p>
-            <p className="text-[#3ECF8E]">{totalAbsent}</p>
+            <p className="text-white text-lg">Not Attended</p>
+            <p className="text-[#3ECF8E] text-3xl">{totalAbsent}</p>
           </div>
         </div>
       </div>
+
       <div className="flex bg-[#1d1d1d] flex-col rounded-lg">
-        <Outlet context={{ attendanceData }} />
+        <Outlet context={{ attendanceData }} className="bg-red-500"/>
       </div>
     </div>
   );

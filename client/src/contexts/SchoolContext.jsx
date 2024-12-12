@@ -7,14 +7,16 @@ const SchoolContext = createContext();
 function SchoolProvider({ children }) {
   const [userData, setUserdata] = useState({});
   const [classData, setClassData] = useState({});
+  const [scheduleData, setScheduleData] = useState([]);
   // const [attendance, setAttendance] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [classDataRes] = await Promise.all([
+        const [classDataRes, scheduleDataRes] = await Promise.all([
           axios.get("http://localhost:8800/class/data"),
+          axios.get("http://localhost:8800/schedule/data"),
           axios
             .get("http://localhost:8800/login")
             .then((res) => {
@@ -34,8 +36,8 @@ function SchoolProvider({ children }) {
             }),
         ]);
 
+        setScheduleData(scheduleDataRes.data);
         setClassData(classDataRes.data);
-        console.log(classData);
       } catch (err) {
         console.error(err);
       }
@@ -44,7 +46,7 @@ function SchoolProvider({ children }) {
     fetchData();
   }, []);
   return (
-    <SchoolContext.Provider value={{ classData, userData }}>
+    <SchoolContext.Provider value={{ classData, userData, scheduleData }}>
       {children}
     </SchoolContext.Provider>
   );

@@ -32,7 +32,7 @@ function Sidebar() {
     {
       icon: <PendingActionsIcon />,
       context: "Attendance",
-      path: `/attendance?studentId=${userData.StudentID}/${attendanceData[0].course_name}`,
+      path: `/attendance/${userData.StudentID}/${attendanceData[0].course_name}`,
     },
     { icon: <CalendarMonthIcon />, context: "Schedule", path: "/schedule" },
   ];

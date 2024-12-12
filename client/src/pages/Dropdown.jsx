@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useAttendance } from "../contexts/AttendanceContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSchool } from "../contexts/SchoolContext";
 
@@ -11,8 +10,8 @@ const Dropdown = ({ attendanceData }) => {
   const { userData } = useSchool();
 
   // Extract course name from query parameters
-  const searchParams = new URLSearchParams(location.search);
-  const courseName = searchParams.get("studentId")?.split("/")[1];
+  const pathSegments = window.location.pathname.split("/");
+  const courseName = decodeURIComponent(pathSegments[3]);
 
   useEffect(() => {
     if (attendanceData && courseName) {
@@ -37,7 +36,7 @@ const Dropdown = ({ attendanceData }) => {
   };
 
   if (!currentCourseName) {
-    return <div>Loading...</div>;
+    return <div className="text-white">Loading...</div>;
   }
 
   return (
@@ -82,7 +81,7 @@ const Dropdown = ({ attendanceData }) => {
             <button
               key={index}
               onClick={() => handleCourseSelect(item.course_name)}
-              className="block px-4 py-2 text-sm text-white hover:bg-[#616161]"
+              className="block px-4 py-2 text-sm text-white hover:bg-[#616161] w-full text-left"
               role="menuitem"
             >
               {item.course_name}
