@@ -5,7 +5,8 @@ const router = express.Router();
 
 router.get("/data", (req, res) => {
     
-    const query = `
+    const query = 
+    req.session.usertype === "Student" ? `
     SELECT DISTINCT
         t.first_name AS teacher_firstname,
         t.last_name AS teacher_lastname,
@@ -26,8 +27,29 @@ router.get("/data", (req, res) => {
         tc.CourseID = c.courseID
     WHERE
         cs.ClassID = ?`
+    :
+    `
+    SELECT DISTINCT
+        cl.class_name AS cl_name,
+        c.course_name AS name
+    FROM
+        ClassSchedule cs
+    JOIN
+        Class cl
+    ON
+        cl.ClassID = cs.ClassID
+    JOIN
+        TeacherCourseAssignment tc
+    ON
+        tc.TeacherCourseID = cs.TeacherCourseID
+    JOIN
+        courses c
+    ON
+        tc.CourseID = c.courseID
+    WHERE
+        tc.TeacherID = ?`
 
-    const queryID = req.session.classID;
+    const queryID = req.session.usertype === "Student" ? req.session.classID : req.session.TeacherID;
 
     db.query(query, [queryID], (err, courseData) => {
         if (err) return res.json({ message: "Server Error" });

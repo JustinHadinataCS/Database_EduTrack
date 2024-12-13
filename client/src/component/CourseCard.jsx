@@ -6,7 +6,7 @@ function CourseCard({ courseData}) {
           {courseData.name}
         </p>
         <p className="font-normal mr-5 text-[#FFFFFF] text-base py-2">
-          {courseData.teacher_firstname} {courseData.teacher_lastname}
+          {courseData.teacher_firstname} {courseData.teacher_lastname} {courseData.cl_name}
         </p>
       </div>
     </div>
