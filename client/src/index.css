@@ -17,3 +17,38 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.timetable-container {
+  display: grid;
+  grid-template-columns: 1fr repeat(5, minmax(100px, 1fr));
+  grid-template-rows: auto repeat(48, 1fr); /* Increase the number of rows for higher precision */
+  border: 1px  #3d3d3d solid;
+  color: white;
+}
+.day-names {
+  border: 1px  #3d3d3d solid;
+  grid-row: 1;
+  grid-column: 2 / -1;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(100px, 1fr));
+}
+.time-slots {
+  grid-row: 2 / -1;
+  grid-column: 1;
+  display: grid;
+  grid-template-rows: repeat(13, 1fr); /* Same as the number of rows in the main container */
+}
+.course-blocks {
+  border: 1px  #3d3d3d solid;
+  grid-row: 2 / -1;
+  grid-column: 2 / -1;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(100px, 1fr));
+  grid-template-rows: repeat(13, 1fr); /* Same as the number of rows in the main container */
+}
+.course-block {
+  border: 1px #3d3d3d solid;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+}

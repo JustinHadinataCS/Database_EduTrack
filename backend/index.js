@@ -1,262 +1,47 @@
 import express from "express";
 import session from "express-session";
-import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
 import cors from "cors";
-import mysql from "mysql2";
+import attendanceRoutes from "./attendance.js";
+import loginRoutes from "./login.js";
+import classRoutes from "./class.js";
+import scheduleRoutes from "./schedule.js";
+import courseRoutes from "./course.js";
 
 const app = express();
-app.use(cors({
-  origin: ["http://localhost:3000"],
-  methods: ["POST", "GET"],
-  credentials: true
-}));
+
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    methods: ["POST", "GET"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
-app.use(bodyParser.json())
-app.use(session({
-  secret: 'secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false,
-    maxAge: 1000 * 60 * 60 * 24
-  }
-}))
+app.use(bodyParser.json());
+app.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  })
+);
 
-// CONNECTING TO MYSQL SERVER
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "1234",
-  database: "school",
-});
-
-// FUNCTION TO GIVE QUERIES TO MYSQL
-const queryDB = (query) => {
-  return new Promise((resolve, reject) => {
-    db.query(query, (err, data) => {
-      if (err) return reject(err);
-      resolve(data);
-    });
-  });
-};
-
-// BACKEND TEST
 app.get("/", (req, res) => {
   res.json("Hello this is the backend");
 });
 
-// LOGIN FORM
-app.post("/login", (req, res) => {
-  const student_query = `
-  SELECT 
-    sc.student_email, 
-    sc.student_password, 
-    s.first_name, 
-    s.last_name,
-    s.classID 
-  FROM 
-    student_credentials sc
-  JOIN 
-    students s 
-  ON 
-    sc.StudentID = s.StudentID
-  WHERE 
-    sc.student_email = ? AND sc.student_password = ?`;
-
-  const teacher_query = `
-  SELECT 
-    tc.teacher_email, 
-    tc.teacher_password, 
-    t.first_name, 
-    t.last_name,
-    c.classID
-  FROM 
-    teacher_credentials tc
-  JOIN 
-    teachers t 
-  ON 
-    tc.TeacherID = t.TeacherID
-  JOIN
-    class c
-  ON
-    tc.TeacherID = c.TeacherID
-  WHERE 
-    tc.teacher_email = ? AND tc.teacher_password = ?`;
-  
-  db.query(student_query, [req.body.email, req.body.password], (err, studentData) => {
-    if(err) return res.json({ message: 'Server Error' });
-
-    if(studentData.length > 0){
-      req.session.firstname = studentData[0].first_name;
-      req.session.lastname = studentData[0].last_name;
-      req.session.classID = studentData[0].classID;
-      req.session.usertype = "Student";
-      return res.json({Login: true});
-    } 
-    
-    db.query(teacher_query, [req.body.email, req.body.password], (err, teacherData) => {
-      if (err) return res.json({ message: "Server Error" });
-
-      if (teacherData.length > 0) {
-        req.session.firstname = teacherData[0].first_name;
-        req.session.lastname = teacherData[0].last_name;
-        req.session.classID = teacherData[0].classID;
-        req.session.usertype = "Teacher";
-        return res.json({Login: true});
-      }
-      else{
-        return res.json({Login: false});
-      }
-    })
-  });
-});
-
-app.get("/login", (req, res) => {
-  if(req.session.firstname){
-    return res.json({valid: true, firstname: req.session.firstname, lastname: req.session.lastname, usertype: req.session.usertype})
-  }
-  else{
-    return res.json({valid: false})
-  }
-});
-
-//GET METHOD TO DISPLAY CLASS INFORMATION
-app.get("/class/data", async (req, res) => {
-
-  let query = "";
-  let queryID = "";
-
-  // QUERY FOR STUDENTS
-  if(req.session.usertype == "Student"){
-    query = `
-    SELECT 
-      s.first_name AS student_firstname, 
-      s.last_name AS student_lastname, 
-      s.StudentID AS student_id,
-      t.first_name AS teacher_firstname, 
-      t.last_name AS teacher_lastname, 
-      c.class_name class_name
-    FROM 
-      students s
-    JOIN
-      class c
-    ON
-      c.ClassID = s.ClassID
-    JOIN
-      teachers t
-    ON
-      t.TeacherID = c.TeacherID
-    WHERE 
-      s.ClassID = ?`;
-  }
-
-  // QUERY FOR TEACHERS
-  else{
-    query = `
-    SELECT 
-      s.first_name AS student_firstname, 
-      s.last_name AS student_lastname, 
-      s.StudentID AS student_id,
-      t.first_name AS teacher_firstname, 
-      t.last_name AS teacher_lastname, 
-      c.class_name class_name
-    FROM 
-      students s
-    JOIN
-      class c
-    ON
-      c.ClassID = s.ClassID
-    JOIN
-      teachers t
-    ON
-      t.TeacherID = c.TeacherID
-    WHERE 
-      t.TeacherID = ?`;
-  }
-
-  queryID = req.session.classID
-
-  db.query(query, [queryID], (err, classData) => {
-    if (err) return res.json({ message: "Server Error" });
-
-    if (classData.length > 0) {
-      const response = {
-        students: classData.map(row => ({
-          firstName: row.student_firstname,
-          lastName: row.student_lastname,
-          id: row.student_id,
-        })),
-        teacher: {
-          firstName: classData[0].teacher_firstname,
-          lastName: classData[0].teacher_lastname,
-        },
-        className: classData[0].class_name,
-      };
-
-      return res.json(response);
-    }
-    else{
-      return res.json({});
-    }
-  })
-   
-});
-
-app.get("/course/data", async (req, res) => {
-  let query = "";
-  let queryID = "";
-
-  // QUERY FOR STUDENTS
-  if(req.session.usertype == "Student"){
-    query = `
-    SELECT DISTINCT 
-      c.CourseName, 
-      t.first_name, 
-      t.last_name
-    FROM 
-      ClassSchedule cs
-    JOIN 
-      TeacherCourseAssignment tc 
-    ON 
-      cs.TeacherCourseID = tc.TeacherCourseID
-    JOIN 
-      Courses c 
-    ON 
-      tc.CourseID = c.CourseID
-    JOIN
-      teachers t
-    ON
-      t.TeacherID = c.TeacherID
-    WHERE
-      cs.ClassID = ?`;
-  }
-
-  // QUERY FOR TEACHERS
-  else{
-    query = `
-    `;
-  }
-
-  queryID = req.session.classID
-
-  db.query(query, [queryID], (err, courseData) => {
-    if (err) return res.json({ message: "Server Error" });
-
-    if (courseData.length > 0) {
-      const response = {
-        
-      };
-
-      return res.json(response);
-    }
-    else{
-      return res.json({});
-    }
-  })
-
-});
+app.use("/login", loginRoutes);
+app.use("/class", classRoutes);
+app.use("/attendance", attendanceRoutes);
+app.use("/schedule", scheduleRoutes);
+app.use("/course", courseRoutes);
 
 app.listen(8800, () => {
   console.log("Connected to backend!");

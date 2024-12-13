@@ -37,7 +37,7 @@ The project is organized into two primary directories:
 3.  **Configure Database Credentials:**  Add database credentials (host, user, password, database name) to `.env` in the backend folder.  
 4.  **Start Backend:**
     ```bash
-    npm start 
+    nodemon index.js
     ```
 
 

@@ -3,11 +3,15 @@ import { useSchool } from "../contexts/SchoolContext";
 function Header() {
   const { userData } = useSchool();
 
+  const pathSegments = window.location.pathname.split("/");
+  let courseName = decodeURIComponent(pathSegments[1]);
+  courseName = courseName[0].toUpperCase() + courseName.slice(1)
+
   if (!userData || !userData.firstname || !userData.lastname) {
     return (
       <div className="flex bg-[#1d1d1d] text-white gap-y-3 p-4 items-center justify-between">
         <h1 className="text-[#3ECF8E] text-4xl font-light tracking-tighter">
-          Dashboard
+          {courseName}
         </h1>
         <div className="flex items-center">
           <span>Loading...</span>
@@ -18,8 +22,8 @@ function Header() {
 
   return (
     <div className="flex bg-[#1d1d1d] text-white gap-y-3 p-4 items-center justify-between">
-      <h1 className="text-[#3ECF8E] text-4xl font-light tracking-tighter">
-        Dashboard
+      <h1 className="text-[#3ECF8E] text-4xl font-xl tracking-tighter">
+        {courseName}
       </h1>
       <div className="flex items-center">
         <div className="rounded-full bg-[#3ECF8E] w-8 h-8 mr-2 flex items-center justify-center">
@@ -30,8 +34,11 @@ function Header() {
         </div>
         <span className="text-[#FFFFFF] text-base font-normal">
           <div className="flex gap-x-1">
-            {userData.firstname}{" "}{userData.lastname}{" | "}
-            <span className="text-[#3ECF8E] font-bold">{userData.usertype}</span>
+            {userData.firstname} {userData.lastname}
+            {" | "}
+            <span className="text-[#3ECF8E] font-bold">
+              {userData.usertype}
+            </span>
           </div>
         </span>
       </div>
