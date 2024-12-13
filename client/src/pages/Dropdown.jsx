@@ -4,7 +4,6 @@ import { useSchool } from "../contexts/SchoolContext";
 
 const Dropdown = ({ attendanceData }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [currentCourseName, setCurrentCourseName] = useState(null);
   const { userData } = useSchool();

@@ -3,7 +3,6 @@ import StudentCard from "../component/StudentCard"
 
 function MyClass(){
     const { classData } = useSchool();
-    console.log(classData)
 
     return(
         <div className="grid grid-rows-[1fr_4fr] w-full h-full p-10">
