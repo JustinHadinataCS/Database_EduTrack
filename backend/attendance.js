@@ -44,11 +44,6 @@ router.get("/", (req, res) => {
   if (studentId) {
     console.log("Fetching attendance for Student:", studentId);
 
-<<<<<<< Updated upstream
-    // Log raw data for debugging
-/*     console.log("Raw Attendance Data:", attendanceData);
-    console.log("Number of Attendance Records:", attendanceData.length); */
-=======
     const studentQuery = `
       SELECT
         c.course_name,
@@ -67,7 +62,6 @@ router.get("/", (req, res) => {
       ORDER BY
         c.course_name, s.session_number;
     `;
->>>>>>> Stashed changes
 
     db.query(studentQuery, [studentId], (err, attendanceData) => {
       if (err) {
@@ -82,16 +76,6 @@ router.get("/", (req, res) => {
       attendanceData.forEach((row) => {
         const { course_name, session_number, attendance_status } = row;
 
-<<<<<<< Updated upstream
-        // Log each row for detailed debugging
-/*         console.log("Processing Row:", {
-          course_name,
-          session_number,
-          attendance_status,
-        }); */
-
-=======
->>>>>>> Stashed changes
         if (!attendanceByCourse[course_name]) {
           attendanceByCourse[course_name] = {
             course_name,
@@ -109,13 +93,8 @@ router.get("/", (req, res) => {
       return res.json(response);
     });
 
-<<<<<<< Updated upstream
-      // Log the final processed response
-  /*     console.log("Processed Attendance Response:", response); */
-=======
     return; // End the route here for student-specific logic
   }
->>>>>>> Stashed changes
 
   // =========================
   // Teacher Logic

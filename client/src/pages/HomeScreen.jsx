@@ -62,15 +62,15 @@ function HomeScreen() {
   return (
     <div>
       <div className="flex flex-wrap gap-1 xl:justify-between sm:justify-center px-20 py-10 m-auto max-w-[1300px]">
-        <TotalCard count={0} label="Total Students"/>
-        <TotalCard count={0} label="Total Teachers" />
+        <TotalCard count={""} label="Total Students"/>
+        <TotalCard count={""} label="Total Teachers" />
         <TotalCard
-          count={0}
+          count={""}
           label="Present Students"
           extra="%"
         />
         <TotalCard
-          count={0}
+          count={""}
           label="Absent Students"
           extra="%"
         /> 
@@ -86,33 +86,37 @@ function HomeScreen() {
         <div className="flex flex-col w-[380px] h-[500px] bg-[#2e2e2e] rounded-xl">
           <h1 className="border-b border-[#565656] p-3 text-white text-2xl">Upcoming Class</h1>
           <div className="flex flex-col gap-10 w-full h-full rounded-bl-xl rounded-br-xl p-7 text-white">
-          {upcomingClass ? 
-          <>            
-            <h1 className="text-5xl font-semibold">{upcomingClass.name}</h1>
-            <div className="flex items-center text-xl gap-3">
-              <div className="rounded-full bg-[#3ECF8E] w-12 h-12 mr-2 flex items-center justify-center">
-                <span className="text-[#121212] text-xl font-medium">
-                  {upcomingClass.teacher_firstname[0]}
-                  {upcomingClass.teacher_lastname[0]}
-                </span>
+            {upcomingClass ? 
+            <>            
+              <h1 className="text-5xl font-semibold">{upcomingClass.name} {upcomingClass.class ? upcomingClass.class : ""}</h1>
+              <div className="flex items-center text-xl gap-3">
+                {upcomingClass.teacher_firstname ? 
+                <>
+                  <div className="rounded-full bg-[#3ECF8E] w-12 h-12 mr-2 flex items-center justify-center">
+                    <span className="text-[#121212] text-xl font-medium">
+                      {upcomingClass.teacher_firstname[0]}
+                      {upcomingClass.teacher_lastname[0]}
+                    </span>
+                  </div>
+                  <h1>{upcomingClass.teacher_firstname} {upcomingClass.teacher_lastname}</h1>
+                </>:
+                <></>}
               </div>
-              <h1>{upcomingClass.teacher_firstname} {upcomingClass.teacher_lastname}</h1>
-            </div>
 
-            <div className="flex flex-col gap-3">
-              <div className="flex gap-2">
-                <TodayIcon/>{upcomingClass.day}
+              <div className="flex flex-col gap-3">
+                <div className="flex gap-2">
+                  <TodayIcon/>{upcomingClass.day}
+                </div>
+                <div className="flex gap-2">
+                  <AccessTimeFilledIcon/>{upcomingClass.startTime} - {upcomingClass.endTime}
+                </div>
+                <div className="flex gap-2">
+                  <PlaceIcon/>{upcomingClass.classroom}
+                </div>
               </div>
-              <div className="flex gap-2">
-                <AccessTimeFilledIcon/>{upcomingClass.startTime} - {upcomingClass.endTime}
-              </div>
-              <div className="flex gap-2">
-                <PlaceIcon/>{upcomingClass.classroom}
-              </div>
-            </div>
-          </>: 
-            <>Loading...</> 
-          }
+            </>: 
+              <>Loading...</> 
+            }
 
           </div>
         </div>
