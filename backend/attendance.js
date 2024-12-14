@@ -41,8 +41,8 @@ router.get("/", (req, res) => {
     }
 
     // Log raw data for debugging
-    console.log("Raw Attendance Data:", attendanceData);
-    console.log("Number of Attendance Records:", attendanceData.length);
+/*     console.log("Raw Attendance Data:", attendanceData);
+    console.log("Number of Attendance Records:", attendanceData.length); */
 
     try {
       const attendanceByCourse = {};
@@ -50,11 +50,11 @@ router.get("/", (req, res) => {
         const { course_name, session_number, attendance_status } = row;
 
         // Log each row for detailed debugging
-        console.log("Processing Row:", {
+/*         console.log("Processing Row:", {
           course_name,
           session_number,
           attendance_status,
-        });
+        }); */
 
         if (!attendanceByCourse[course_name]) {
           attendanceByCourse[course_name] = {
@@ -72,7 +72,7 @@ router.get("/", (req, res) => {
       const response = Object.values(attendanceByCourse);
 
       // Log the final processed response
-      console.log("Processed Attendance Response:", response);
+  /*     console.log("Processed Attendance Response:", response); */
 
       res.json(response);
     } catch (processError) {

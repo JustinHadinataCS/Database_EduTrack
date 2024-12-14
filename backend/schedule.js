@@ -11,7 +11,10 @@ router.get("/data", (req, res) => {
         c.course_name as name,
         cs.start_time as startTime,
         cs.end_time as endTime,
-        cs.day_of_week as day
+        cs.day_of_week as day,
+        t.first_name as teacher_firstname,
+        t.last_name as teacher_lastname,
+        clr.room_number as classroom
     FROM 
         ClassSchedule cs
     JOIN 
@@ -22,6 +25,18 @@ router.get("/data", (req, res) => {
         courses c 
     ON 
         tc.CourseID = c.CourseID
+    JOIN
+        class cl
+    ON
+        cl.ClassID = cs.ClassID
+    JOIN
+        classrooms clr
+    ON
+        clr.ClassroomID = cl.ClassroomID
+    JOIN
+        teachers t
+    ON
+        t.TeacherID = tc.TeacherID
     WHERE 
         cs.ClassID = ?`
 

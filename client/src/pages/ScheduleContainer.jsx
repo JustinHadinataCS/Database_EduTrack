@@ -50,19 +50,7 @@ function Schedule() {
 
     // Course data.
     const courseBlockContainer = document.querySelector('.course-blocks');
-    let courses = scheduleData;
-/*     courses = [
-      { name: 'Linear Algebra', startTime: '10:30', endTime: '12:10', day: 'MON', color: 'rgb(248, 242, 67)' },
-      { name: 'Academic English', startTime: '13:30', endTime: '16:00', day: 'MON', color: 'rgb(151, 238, 151)' },
-      { name: 'Data Structure Lab', startTime: '16:30', endTime: '18:10', day: 'MON', color: 'rgb(230, 144, 129)' },
-      { name: 'Data Structure', startTime: '09:30', endTime: '11:10', day: 'TUE', color: 'rgb(88, 130, 154)' },
-      { name: 'Data Structure', startTime: '11:30', endTime: '13:10', day: 'TUE', color: 'rgb(88, 130, 154)' },
-      { name: 'Data Structure Lab', startTime: '15:30', endTime: '17:10', day: 'WED', color: 'rgb(86, 142, 91)' },
-      { name: 'Object Oriented Programming', startTime: '09:30', endTime: '12:00', day: 'THU', color: 'rgb(231, 176, 104)' },
-      { name: 'Project Hatchery', startTime: '13:30', endTime: '15:10', day: 'THU', color: 'rgb(240, 168, 232)' },
-      { name: 'Calculus', startTime: '08:20', endTime: '09:40', day: 'FRI', color: 'rgb(239, 84, 84)' },
-      { name: 'Calculus', startTime: '10:00', endTime: '11:40', day: 'FRI', color: 'rgb(239, 84, 84)' },
-    ]; */
+    const courses = scheduleData;
 
 
     // Generate course blocks.

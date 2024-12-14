@@ -62,7 +62,6 @@ router.post("/", (req, res) => {
         req.session.lastname = studentData[0].last_name;
         req.session.classID = studentData[0].classID;
         req.session.usertype = "Student";
-        console.log("Session Data (Student):", req.session);
         return res.json({ Login: true });
       }
 
@@ -83,7 +82,6 @@ router.post("/", (req, res) => {
             req.session.lastname = teacherData[0].last_name;
             req.session.classID = teacherData[0].classID;
             req.session.usertype = "Teacher";
-            console.log("Session Data (Teacher):", req.session);
             return res.json({ Login: true });
           } else {
             return res.json({ Login: false });
