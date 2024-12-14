@@ -10,9 +10,11 @@ import HomeScreen from "./pages/HomeScreen";
 import ClassContainer from "./pages/ClassContainer";
 import CourseContainer from "./pages/CourseContainer";
 import AttendanceContainer from "./pages/AttendanceContainer.jsx";
-import ScheduleContainer from "./pages/ScheduleContainer.jsx"
+import ScheduleContainer from "./pages/ScheduleContainer.jsx";
 import Login from "./pages/login.jsx";
 import SessionList from "./component/SessionList.jsx";
+import TeacherAttendanceContainer from "./pages/TeacherAttendanceContainer.jsx";
+import TeacherAttendanceView from "./pages/TeacherAttendanceView.jsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -38,7 +40,11 @@ function App() {
           element: <AttendanceContainer />,
           children: [
             {
-              path: ":studentId/:courseName",
+              path: ":studentId/:courseName", // Existing student path
+              element: <SessionList />,
+            },
+            {
+              path: "teacher/:courseName/:sessionNumber", // Teacher path
               element: <SessionList />,
             },
           ],

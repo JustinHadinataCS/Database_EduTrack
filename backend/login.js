@@ -54,10 +54,10 @@ router.post("/", (req, res) => {
         return res.status(500).json({ message: "Server Error" });
       }
 
-      console.log("Student Query Result:", studentData); // Debug query result
+      console.log("Student Query Result:", studentData);
 
       if (studentData.length > 0) {
-        req.session.StudentID = studentData[0].StudentID; // Fix: Ensure StudentID is retrieved
+        req.session.StudentID = studentData[0].StudentID;
         req.session.firstname = studentData[0].first_name;
         req.session.lastname = studentData[0].last_name;
         req.session.classID = studentData[0].classID;
@@ -65,6 +65,7 @@ router.post("/", (req, res) => {
         return res.json({ Login: true });
       }
 
+      // Check for Teacher credentials
       db.query(
         teacherQuery,
         [req.body.email, req.body.password],
@@ -74,10 +75,10 @@ router.post("/", (req, res) => {
             return res.status(500).json({ message: "Server Error" });
           }
 
-          console.log("Teacher Query Result:", teacherData); // Debug query result
+          console.log("Teacher Query Result:", teacherData);
 
           if (teacherData.length > 0) {
-            req.session.TeacherID = teacherData[0].TeacherID; // Save TeacherID if needed
+            req.session.TeacherID = teacherData[0].TeacherID;
             req.session.firstname = teacherData[0].first_name;
             req.session.lastname = teacherData[0].last_name;
             req.session.classID = teacherData[0].classID;
@@ -93,13 +94,22 @@ router.post("/", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-  if (req.session.firstname) {
+  if (req.session.usertype === "Student") {
     return res.json({
       valid: true,
       firstname: req.session.firstname,
       lastname: req.session.lastname,
       usertype: req.session.usertype,
       StudentID: req.session.StudentID,
+    });
+  }
+  if (req.session.usertype === "Teacher") {
+    return res.json({
+      valid: true,
+      firstname: req.session.firstname,
+      lastname: req.session.lastname,
+      usertype: req.session.usertype,
+      TeacherID: req.session.TeacherID,
     });
   } else {
     return res.json({ valid: false });

@@ -21,6 +21,7 @@ function Sidebar() {
   const { userData } = useSchool();
   const { attendanceData } = useAttendance();
   const navigate = useNavigate();
+  console.log(attendanceData);
 
   if (!attendanceData || attendanceData.length === 0) {
     return <div>Loading...</div>;

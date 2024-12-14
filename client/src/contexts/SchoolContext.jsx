@@ -8,48 +8,55 @@ function SchoolProvider({ children }) {
   const [userData, setUserdata] = useState({});
   const [classData, setClassData] = useState({});
   const [scheduleData, setScheduleData] = useState([]);
-  const [courseData, setCourseData] = useState([])
-  // const [attendance, setAttendance] = useState({});
+  const [courseData, setCourseData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [classDataRes, scheduleDataRes, courseDataRes] = await Promise.all([
-          axios.get("http://localhost:8800/class/data"),
-          axios.get("http://localhost:8800/schedule/data"),
-          axios.get("http://localhost:8800/course/data"),
-          axios
-            .get("http://localhost:8800/login")
-            .then((res) => {
-              if (res.data.valid) {
-                setUserdata({
-                  firstname: res.data.firstname,
-                  lastname: res.data.lastname,
-                  usertype: res.data.usertype,
-                  StudentID: res.data.StudentID,
-                });
-              } else {
-                navigate("/Login");
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            }),
-        ]);
+        // Fetching data from different APIs
+        const [classDataRes, scheduleDataRes, courseDataRes, loginRes] =
+          await Promise.all([
+            axios.get("http://localhost:8800/class/data"),
+            axios.get("http://localhost:8800/schedule/data"),
+            axios.get("http://localhost:8800/course/data"),
+            axios.get("http://localhost:8800/login"), // Fetch login info
+          ]);
 
+        if (loginRes.data.valid) {
+          // Handle setting user data based on usertype (Student or Teacher)
+          const userData = {
+            firstname: loginRes.data.firstname,
+            lastname: loginRes.data.lastname,
+            usertype: loginRes.data.usertype,
+            classID: loginRes.data.classID,
+            // Conditionally set either StudentID or TeacherID
+            ...(loginRes.data.usertype === "Student"
+              ? { StudentID: loginRes.data.StudentID }
+              : { TeacherID: loginRes.data.TeacherID }),
+          };
+
+          setUserdata(userData);
+        } else {
+          navigate("/Login"); // Redirect to login if not valid
+        }
+
+        // Set the other data from APIs
         setScheduleData(scheduleDataRes.data);
         setClassData(classDataRes.data);
-        setCourseData(courseDataRes.data)
+        setCourseData(courseDataRes.data);
       } catch (err) {
         console.error(err);
       }
     };
 
     fetchData();
-  }, []);
+  }, [navigate]); // Add navigate to dependencies to prevent potential issues
+
   return (
-    <SchoolContext.Provider value={{ classData, userData, scheduleData, courseData }}>
+    <SchoolContext.Provider
+      value={{ classData, userData, scheduleData, courseData }}
+    >
       {children}
     </SchoolContext.Provider>
   );

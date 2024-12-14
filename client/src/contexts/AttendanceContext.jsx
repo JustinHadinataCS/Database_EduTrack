@@ -7,41 +7,44 @@ const AttendanceContext = createContext();
 function AttendanceProvider({ children }) {
   const [attendanceData, setAttendanceData] = useState([]);
   const { userData } = useSchool();
-  console.log(attendanceData);
 
+  // Fetch attendance data function
+  const fetchAttendanceData = async (courseName, teacherId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/attendance/teacher/${courseName}/${teacherId}`
+      );
+      const data = await response.json();
+      setAttendanceData(data);
+    } catch (error) {
+      console.error("Error fetching attendance data:", error);
+    }
+  };
+
+  // Fetch attendance data based on user type
   useEffect(() => {
+    const idParam =
+      userData.usertype === "Student" ? userData.StudentID : userData.TeacherID;
+
+    if (!idParam) {
+      console.error("No ID available for fetching attendance");
+      return;
+    }
+
     const fetchAttendance = async () => {
-      try {
-        if (!userData || !userData.StudentID) {
-          console.error("No student ID available");
-          return;
-        }
-
-        const response = await fetch(
-          `http://localhost:8800/attendance?studentId=${userData.StudentID}`,
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
-
-        const contentType = response.headers.get("content-type");
-        if (!response.ok || !contentType?.includes("application/json")) {
-          const errorText = await response.text();
-          throw new Error(`Unexpected response: ${errorText}`);
-        }
-
-        const data = await response.json();
-        setAttendanceData(data);
-      } catch (error) {
-        console.error("Error fetching attendance:", error.message);
-      }
+      const response = await fetch(
+        `http://localhost:8800/attendance?${userData.usertype.toLowerCase()}Id=${idParam}`,
+        { method: "GET", credentials: "include" }
+      );
+      const data = await response.json();
+      setAttendanceData(data);
     };
 
     fetchAttendance();
   }, [userData]);
+
   return (
-    <AttendanceContext.Provider value={{ attendanceData }}>
+    <AttendanceContext.Provider value={{ attendanceData, fetchAttendanceData }}>
       {children}
     </AttendanceContext.Provider>
   );
