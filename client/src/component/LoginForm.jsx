@@ -30,7 +30,7 @@ function LoginForm() {
         <form onSubmit={handleSubmit}>
             <div className="flex flex-col mb-6">
                 <label htmlFor="email" className='mb-3'>Email</label>
-                <input type="email" placeholder="Enter Email" className="form-control p-2 border rounded-md outline-none focus:ring-2 focus:ring-[#3ECF8E]" onChange={ e => setEmail(e.target.value)}/>
+                <input type="email" placeholder="Enter Email" className="form-control p-2 border rounded-md outline-none focus:ring-2 focus:ring-[#3ECF8E] text-black" onChange={ e => setEmail(e.target.value)}/>
             </div>
 
             <div className="flex flex-col mb-6">

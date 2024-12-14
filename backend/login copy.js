@@ -22,36 +22,25 @@ router.post("/", (req, res) => {
       sc.student_email = ? AND sc.student_password = ?`;
 
   const teacherQuery = `
-      SELECT 
-        tc.TeacherID, 
-        tc.teacher_email, 
-        tc.teacher_password, 
-        t.first_name, 
-        t.last_name, 
-        GROUP_CONCAT(DISTINCT ses.SessionID) AS SessionIDs
-      FROM 
-        teacher_credentials tc
-      JOIN 
-        teachers t 
-      ON 
-        tc.TeacherID = t.TeacherID
-      JOIN 
-        teacherCourseAssignment tca
-      ON 
-        tc.TeacherID = tca.TeacherID
-	    JOIN 
-        classschedule cs 
-      ON 
-        cs.TeacherCourseID = tca.TeacherCourseID
-      JOIN 
-        sessions ses 
-      ON 
-        ses.ScheduleID = cs.ScheduleID
-      WHERE 
-        tc.teacher_email = ? AND tc.teacher_password = ?
-      GROUP BY 
-        tc.TeacherID;
-    `;
+    SELECT 
+      tc.TeacherID, 
+      tc.teacher_email, 
+      tc.teacher_password, 
+      t.first_name, 
+      t.last_name, 
+      c.classID
+    FROM 
+      teacher_credentials tc
+    JOIN 
+      teachers t 
+    ON 
+      tc.TeacherID = t.TeacherID
+    JOIN 
+      class c 
+    ON 
+      tc.TeacherID = c.TeacherID
+    WHERE 
+      tc.teacher_email = ? AND tc.teacher_password = ?`;
 
   // Debug: Log the request body
   console.log("Request Body:", req.body);
@@ -92,8 +81,7 @@ router.post("/", (req, res) => {
             req.session.TeacherID = teacherData[0].TeacherID;
             req.session.firstname = teacherData[0].first_name;
             req.session.lastname = teacherData[0].last_name;
-            req.session.classID = teacherData[0].ClassID;
-            req.session.sessionIDs = teacherData[0].SessionIDs.split(",");
+            req.session.classID = teacherData[0].classID;
             req.session.usertype = "Teacher";
             return res.json({ Login: true });
           } else {
@@ -122,7 +110,6 @@ router.get("/", (req, res) => {
       lastname: req.session.lastname,
       usertype: req.session.usertype,
       TeacherID: req.session.TeacherID,
-      SessionIDs: req.session.sessionIDs,
     });
   } else {
     return res.json({ valid: false });

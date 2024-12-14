@@ -1,9 +1,9 @@
 import TotalCard from "../component/TotalCard";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { useSchool } from "../contexts/SchoolContext";
-import TodayIcon from '@mui/icons-material/Today';
-import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
-import PlaceIcon from '@mui/icons-material/Place';
+import TodayIcon from "@mui/icons-material/Today";
+import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
+import PlaceIcon from "@mui/icons-material/Place";
 
 function HomeScreen() {
   const { scheduleData } = useSchool();

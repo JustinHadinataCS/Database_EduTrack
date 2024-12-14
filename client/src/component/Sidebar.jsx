@@ -28,7 +28,9 @@ function Sidebar() {
   }
   const menuItems = [
     { icon: <DashboardIcon />, context: "Dashboard", path: "/dashboard" },
-    { icon: <GroupsIcon />, context: "My Class", path: "/class" },
+    ...(userData.usertype === "Student" ? 
+      [{ icon: <GroupsIcon />, context: "My Class", path: "/class" }] : 
+      []),
     { icon: <AutoStoriesIcon />, context: "Courses", path: "/course" },
     {
       icon: <PendingActionsIcon />,

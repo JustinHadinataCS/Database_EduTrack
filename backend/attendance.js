@@ -167,4 +167,84 @@ router.get("/", (req, res) => {
     .json({ error: "Student ID or Teacher ID is required." });
 });
 
+router.post("/data", async (req, res) => {
+  const { courseName, sessionNumber, students } = req.body;
+
+  try {
+    // Get courseID based on courseName
+    const [courseResult] = await db
+      .promise()
+      .query("SELECT CourseID FROM courses WHERE course_name = ?", [
+        courseName,
+      ]);
+    if (courseResult.length === 0) {
+      return res.status(400).json({ message: "Invalid course name" });
+    }
+
+    const courseID = courseResult[0].CourseID;
+
+    // Get sessionID based on courseID and sessionNumber
+    const [sessionResult] = await db
+      .promise()
+      .query(
+        `SELECT
+          s.sessionID
+        FROM
+          sessions s
+        JOIN
+          classschedule cs
+        ON
+          s.scheduleID = cs.scheduleID
+        JOIN
+          teachercourseassignment tc
+        ON
+          tc.teachercourseid = cs.teachercourseid
+        JOIN
+          courses c
+        ON
+          tc.courseid = c.courseid
+        WHERE
+          s.session_number = ?
+        AND
+          c.courseID = ?`,
+        [sessionNumber, courseID]
+      );
+    if (sessionResult.length === 0) {
+      return res.status(400).json({ message: "Invalid session number" });
+    }
+
+    const sessionID = sessionResult[0].sessionID;
+
+    // Insert or update attendance data
+    for (const student of students) {
+      await db.promise().query(
+        `INSERT INTO attendance (StudentID, SessionID, attendance_status, comments)
+         VALUES (?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE
+         attendance_status = VALUES(attendance_status),
+         comments = VALUES(comments)`,
+        [
+          student.studentID,
+          sessionID,
+          student.attendance_status,
+          student.comment,
+        ]
+      );
+    }
+
+    res.json({ message: "Attendance updated successfully" });
+  } catch (error) {
+    console.error("Error processing attendance:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.post("/aaaaa", (req, res) => {
+  const receivedData = req.body; // Access the sent data
+  console.log('Received data:', receivedData);
+
+  // Send a response back to the client
+  res.status(200).json({ message: 'Data received successfully', data: receivedData });
+});
+
 export default router;
