@@ -44,11 +44,6 @@ router.get("/", (req, res) => {
   if (studentId) {
     console.log("Fetching attendance for Student:", studentId);
 
-<<<<<<< Updated upstream
-    // Log raw data for debugging
-/*     console.log("Raw Attendance Data:", attendanceData);
-    console.log("Number of Attendance Records:", attendanceData.length); */
-=======
     const studentQuery = `
       SELECT
         c.course_name,
@@ -67,7 +62,6 @@ router.get("/", (req, res) => {
       ORDER BY
         c.course_name, s.session_number;
     `;
->>>>>>> Stashed changes
 
     db.query(studentQuery, [studentId], (err, attendanceData) => {
       if (err) {
@@ -82,16 +76,6 @@ router.get("/", (req, res) => {
       attendanceData.forEach((row) => {
         const { course_name, session_number, attendance_status } = row;
 
-<<<<<<< Updated upstream
-        // Log each row for detailed debugging
-/*         console.log("Processing Row:", {
-          course_name,
-          session_number,
-          attendance_status,
-        }); */
-
-=======
->>>>>>> Stashed changes
         if (!attendanceByCourse[course_name]) {
           attendanceByCourse[course_name] = {
             course_name,
@@ -109,13 +93,8 @@ router.get("/", (req, res) => {
       return res.json(response);
     });
 
-<<<<<<< Updated upstream
-      // Log the final processed response
-  /*     console.log("Processed Attendance Response:", response); */
-=======
     return; // End the route here for student-specific logic
   }
->>>>>>> Stashed changes
 
   // =========================
   // Teacher Logic
@@ -186,6 +165,58 @@ router.get("/", (req, res) => {
   return res
     .status(400)
     .json({ error: "Student ID or Teacher ID is required." });
+});
+router.post("/attendance", async (req, res) => {
+  const { courseName, sessionNumber, students } = req.body;
+
+  try {
+    // Get courseID based on courseName
+    const [courseResult] = await db
+      .promise()
+      .query("SELECT CourseID FROM courses WHERE course_name = ?", [
+        courseName,
+      ]);
+    if (courseResult.length === 0) {
+      return res.status(400).json({ message: "Invalid course name" });
+    }
+
+    const courseID = courseResult[0].CourseID;
+
+    // Get sessionID based on courseID and sessionNumber
+    const [sessionResult] = await db
+      .promise()
+      .query(
+        "SELECT SessionID FROM sessions WHERE courseID = ? AND session_number = ?",
+        [courseID, sessionNumber]
+      );
+    if (sessionResult.length === 0) {
+      return res.status(400).json({ message: "Invalid session number" });
+    }
+
+    const sessionID = sessionResult[0].SessionID;
+
+    // Insert or update attendance data
+    for (const student of students) {
+      await db.promise().query(
+        `INSERT INTO attendance (StudentID, SessionID, attendance_status, comment)
+         VALUES (?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE
+         attendance_status = VALUES(attendance_status),
+         comment = VALUES(comment)`,
+        [
+          student.studentID,
+          sessionID,
+          student.attendance_status,
+          student.comment,
+        ]
+      );
+    }
+
+    res.json({ message: "Attendance updated successfully" });
+  } catch (error) {
+    console.error("Error processing attendance:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 export default router;

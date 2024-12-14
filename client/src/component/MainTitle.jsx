@@ -1,7 +1,9 @@
 import SquareFootIcon from "@mui/icons-material/SquareFoot";
 import { useNavigate } from "react-router-dom";
+import { useSchool } from "../contexts/SchoolContext";
 
 function MainTitle({ onClick, setIndicatorStyle }) {
+  const { userData } = useSchool();
   const navigate = useNavigate();
   function handleButton(e) {
     e.preventDefault();
@@ -9,6 +11,7 @@ function MainTitle({ onClick, setIndicatorStyle }) {
     onClick();
     setIndicatorStyle();
   }
+  console.log(userData);
   return (
     <div
       onClick={handleButton}

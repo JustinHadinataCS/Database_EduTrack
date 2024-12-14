@@ -34,6 +34,7 @@ function SchoolProvider({ children }) {
             ...(loginRes.data.usertype === "Student"
               ? { StudentID: loginRes.data.StudentID }
               : { TeacherID: loginRes.data.TeacherID }),
+            SessionIDs: loginRes.data.SessionIDs,
           };
 
           setUserdata(userData);
