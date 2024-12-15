@@ -92,7 +92,7 @@ const TeacherAttendanceContainer = () => {
           {/* Header Row */}
           <div className="flex items-center justify-between w-full text-gray-300 font-bold py-2 border-b border-gray-600">
             <div className="w-1/3 flex justify-start">ID & Name</div>
-            <div className="w-1/3 flex justify-center">Attendance Status</div>
+            <div className="w-5/6 flex justify-start">Attendance Status</div>
             <div className="w-1/3 flex justify-end">Comments</div>
           </div>
 
@@ -109,7 +109,7 @@ const TeacherAttendanceContainer = () => {
               </div>
 
               {/* Attendance Button */}
-              <div className="w-1/3 flex justify-center">
+              <div className="w-5/6 flex justify-start">
                 <button
                   onClick={() => handleAttendanceToggle(student.StudentID)}
                   className={`px-4 py-2 rounded transition-all duration-300 ease-in ${
