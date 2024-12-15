@@ -88,38 +88,34 @@ const TeacherAttendanceContainer = () => {
       </div>
 
       {sessionData ? (
-        <div className="flex p-8 gap-x-10 rounded-lg bg-[#1d1d1d] flex-col">
+        <div className="flex p-8 gap-x-10 rounded-lg bg-[#1d1d1d] flex-col border">
           {sessionData.students?.map((student) => (
             <div
               key={student.StudentID}
-              className="flex items-center justify-between w-full text-white  py-3"
+              className="flex justify-between font-bold text-lg text-white border"
             >
-              {/* Student Info */}
-              <div className="flex items-center gap-x-4 w-1/3">
-                <span className="font-bold">{student.StudentID}</span>
-                <span className="font-bold">{student.student_name}</span>
+              <div className="flex gap-x-4">
+                <div></div>
+                <div>{student.StudentID}</div>
+                <div>{student.student_name}</div>
+                <div className="flex justify-end border">
+                  <button
+                    onClick={() => handleAttendanceToggle(student.StudentID)}
+                    className={`px-4 py-2 rounded ${
+                      student.attendance_status ? "bg-green-500" : "bg-red-500"
+                    }`}
+                  >
+                    {student.attendance_status ? "Present" : "Absent"}
+                  </button>
+                </div>
               </div>
-
-              {/* Attendance Button */}
-              <div className="w-5/6 flex justify-start">
-                <button
-                  onClick={() => handleAttendanceToggle(student.StudentID)}
-                  className={`px-4 py-2 rounded transition-all duration-300 ease-in ${
-                    student.attendance_status ? "bg-green-500" : "bg-red-500"
-                  }`}
-                >
-                  {student.attendance_status ? "Present" : "Absent"}
-                </button>
-              </div>
-
-              {/* Comments Dropdown */}
-              <div className="w-1/3 flex justify-end">
+              <div>
                 <select
                   value={student.comment || ""}
                   onChange={(e) =>
                     handleCommentChange(student.StudentID, e.target.value)
                   }
-                  className="bg-[#1d1d1d] text-white px-4 py-2 rounded-md border border-gray-600"
+                  className="bg-[#1d1d1d] text-white px-4 py-2 rounded-md"
                 >
                   <option value="">No Comments</option>
                   <option value="Sick">Sick</option>
