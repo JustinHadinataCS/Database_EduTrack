@@ -12,17 +12,80 @@ EduTrack is designed to streamline administrative tasks in an educational settin
 * **Backend:** Node.js, Express.js, MySQL for database interactions, Express-session for user sessions.
 
 
-## Project Structure
-
-The project is organized into two primary directories:
-
-* **client:** Contains the React frontend application.
-    * `src/`: Source code for the React components, styles (Tailwind), and utilities.
-    * `public/`: Contains static assets like images and index.html.
-* **backend:** Contains the Node.js backend application.
-    * `index.js`: Main entry point of the backend.
-    *  Database files (`school.sql` or similar).
-
+## File Project Structure
+```
+├─ .gitattributes
+├─ .gitignore
+├─ README.md
+├─ backend
+│  ├─ .gitignore
+│  ├─ attendance.js
+│  ├─ class.js
+│  ├─ connection.js
+│  ├─ course.js
+│  ├─ dashboard.js
+│  ├─ index.js
+│  ├─ login copy.js
+│  ├─ login.js
+│  ├─ package-lock.json
+│  ├─ package.json
+│  └─ schedule.js
+├─ client
+│  ├─ .gitignore
+│  ├─ README.md
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ public
+│  │  ├─ favicon.ico
+│  │  ├─ index.html
+│  │  ├─ logo192.png
+│  │  ├─ logo512.png
+│  │  ├─ manifest.json
+│  │  └─ robots.txt
+│  ├─ src
+│  │  ├─ App.js
+│  │  ├─ component
+│  │  │  ├─ CourseCard.jsx
+│  │  │  ├─ Error.jsx
+│  │  │  ├─ Header.jsx
+│  │  │  ├─ LoginForm.jsx
+│  │  │  ├─ MainTitle.jsx
+│  │  │  ├─ RightLeftContainer.jsx
+│  │  │  ├─ SessionDetail.jsx
+│  │  │  ├─ SessionList.jsx
+│  │  │  ├─ SideItem.jsx
+│  │  │  ├─ Sidebar.jsx
+│  │  │  ├─ StudentCard.jsx
+│  │  │  └─ TotalCard.jsx
+│  │  ├─ contexts
+│  │  │  ├─ AttendanceContext.jsx
+│  │  │  └─ SchoolContext.jsx
+│  │  ├─ index.css
+│  │  ├─ index.js
+│  │  ├─ pages
+│  │  │  ├─ Add.jsx
+│  │  │  ├─ Attendance.jsx
+│  │  │  ├─ AttendanceContainer copy.jsx
+│  │  │  ├─ AttendanceContainer.jsx
+│  │  │  ├─ Books.jsx
+│  │  │  ├─ ClassContainer.jsx
+│  │  │  ├─ CourseContainer.jsx
+│  │  │  ├─ Dropdown copy.jsx
+│  │  │  ├─ Dropdown.jsx
+│  │  │  ├─ HomePage.jsx
+│  │  │  ├─ HomeScreen.jsx
+│  │  │  ├─ ScheduleContainer.jsx
+│  │  │  ├─ TeacherAttendanceContainer copy.jsx
+│  │  │  ├─ TeacherAttendanceContainer.jsx
+│  │  │  ├─ TeacherAttendanceView.jsx
+│  │  │  ├─ TeacherDropdown.jsx
+│  │  │  ├─ Update.jsx
+│  │  │  └─ login.jsx
+│  │  └─ style.css
+│  └─ tailwind.config.js
+├─ package-lock.json
+└─ package.json
+```
 
 ## Setup Instructions
 
