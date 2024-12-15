@@ -72,6 +72,7 @@ const TeacherAttendanceContainer = () => {
         }
       );
       console.log("Attendance submitted successfully:", response.data);
+      alert("Attendance submitted successfully");
     } catch (error) {
       console.error("Error submitting attendance:", error);
     }
@@ -141,7 +142,7 @@ const TeacherAttendanceContainer = () => {
           {/* Submit Button */}
           <button
             onClick={handleSubmit}
-            className="bg-[#3ECF8E] text-black px-4 py-2 rounded-md mt-4"
+            className="text-white  bg-[#3ECF8E]  px-4 hover:bg-[#2e9868] transition-all duration-300 py-2 rounded-md mt-4"
           >
             Submit Attendance
           </button>
