@@ -25,7 +25,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="flex items-center justify-center p-10 shadow-[2px_4px_6px_0px_rgba(51,_65,_85,_0.12)] border rounded-xl bg-[#1d1d1d] border-[#3d3d3d] text-white">
+    <div className=" font-karla flex items-center justify-center p-10 shadow-[2px_4px_6px_0px_rgba(51,_65,_85,_0.12)] border rounded-xl bg-[#1d1d1d] border-[#3d3d3d] text-white">
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col mb-6">
           <label htmlFor="email" className="mb-3">
@@ -51,7 +51,7 @@ function LoginForm() {
           />
         </div>
 
-        <button className="w-full bg-[#3ECF8E] p-2 rounded-md hover:bg-[#2e9868] transition-all duration-300">
+        <button className="text-black w-full bg-[#3ECF8E] p-2 rounded-md hover:bg-[#2e9868] transition-all duration-300">
           Sign In
         </button>
       </form>

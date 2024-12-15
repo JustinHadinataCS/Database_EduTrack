@@ -28,7 +28,7 @@ const TeacherDropdown = () => {
           setSelectedCourse(e.target.value);
           setSelectedSession(""); // Reset session on course change
         }}
-        className="bg-[#1d1d1d] text-white px-4 py-2 rounded-md cursor-pointer"
+        className="bg-[#1d1d1d] text-white px-4 py-2 rounded-md cursor-pointer hover:bg-[#2e2e2e] transition-all duration-300"
       >
         <option value="" disabled>
           Select Course
@@ -44,7 +44,7 @@ const TeacherDropdown = () => {
       <select
         value={selectedSession}
         onChange={(e) => setSelectedSession(e.target.value)}
-        className="bg-[#1d1d1d] text-white px-4 py-2 rounded-md cursor-pointer"
+        className="bg-[#1d1d1d] text-white px-4 py-2 rounded-md cursor-pointer hover:bg-[#2e2e2e] transition-all duration-300"
         disabled={!selectedCourse}
       >
         <option value="" disabled>
@@ -60,7 +60,7 @@ const TeacherDropdown = () => {
       <button
         onClick={handleViewAttendance}
         disabled={!selectedCourse || !selectedSession}
-        className="bg-[#3ECF8E] text-black px-4 py-2 rounded-md cursor-pointer disabled:opacity-50"
+        className="hover:bg-[#2e9868] transition-all duration-300 bg-[#3ECF8E] text-black px-4 py-2 rounded-md cursor-pointer disabled:opacity-50"
       >
         View Attendance
       </button>
