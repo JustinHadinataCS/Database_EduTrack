@@ -51,7 +51,9 @@ function LoginForm() {
           />
         </div>
 
-        <button className="w-full bg-[#3ECF8E] p-2 rounded-md">Sign In</button>
+        <button className="w-full bg-[#3ECF8E] p-2 rounded-md hover:bg-[#2e9868] transition-all duration-300">
+          Sign In
+        </button>
       </form>
     </div>
   );
