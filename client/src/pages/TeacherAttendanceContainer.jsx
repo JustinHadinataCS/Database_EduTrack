@@ -89,10 +89,18 @@ const TeacherAttendanceContainer = () => {
 
       {sessionData ? (
         <div className="flex p-8 gap-x-10 rounded-lg bg-[#1d1d1d] flex-col">
+          {/* Header Row */}
+          <div className="flex items-center justify-between w-full text-gray-300 font-bold py-2 border-b border-gray-600">
+            <div className="w-1/3 flex justify-start">ID & Name</div>
+            <div className="w-1/3 flex justify-center">Attendance Status</div>
+            <div className="w-1/3 flex justify-end">Comments</div>
+          </div>
+
+          {/* Student Rows */}
           {sessionData.students?.map((student) => (
             <div
               key={student.StudentID}
-              className="flex items-center justify-between w-full text-white  py-3"
+              className="flex items-center justify-between w-full text-white py-3"
             >
               {/* Student Info */}
               <div className="flex items-center gap-x-4 w-1/3">
@@ -101,7 +109,7 @@ const TeacherAttendanceContainer = () => {
               </div>
 
               {/* Attendance Button */}
-              <div className="w-5/6 flex justify-start">
+              <div className="w-1/3 flex justify-center">
                 <button
                   onClick={() => handleAttendanceToggle(student.StudentID)}
                   className={`px-4 py-2 rounded transition-all duration-300 ease-in ${
@@ -129,6 +137,8 @@ const TeacherAttendanceContainer = () => {
               </div>
             </div>
           ))}
+
+          {/* Submit Button */}
           <button
             onClick={handleSubmit}
             className="bg-[#3ECF8E] text-black px-4 py-2 rounded-md mt-4"
