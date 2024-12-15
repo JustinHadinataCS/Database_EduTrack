@@ -6,7 +6,7 @@ import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import PlaceIcon from "@mui/icons-material/Place";
 
 function HomeScreen() {
-  const { scheduleData } = useSchool();
+  const { totalData, scheduleData } = useSchool();
   const [upcomingClass, setUpcomingClass] = useState(null);
 
   function getUpcomingClass(timetable) {
@@ -62,8 +62,8 @@ function HomeScreen() {
   return (
     <div>
       <div className="flex flex-wrap gap-1 xl:justify-between sm:justify-center px-20 py-10 m-auto max-w-[1300px]">
-        <TotalCard count={""} label="Total Students"/>
-        <TotalCard count={""} label="Total Teachers" />
+        <TotalCard count={totalData.Students} label="Total Students"/>
+        <TotalCard count={totalData.Teachers} label="Total Teachers" />
         <TotalCard
           count={""}
           label="Present Students"

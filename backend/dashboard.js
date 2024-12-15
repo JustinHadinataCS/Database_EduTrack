@@ -1,61 +1,32 @@
-/* import express from "express";
+import express from "express";
 import db from "./connection.js";
 
 const router = express.Router();
 
-router.get("/data", (req, res) => {
+router.get("/data/totalStudents", (req, res) => {
     
-    const query = 
-    req.session.usertype === "Student" ? `
-    SELECT DISTINCT
-        t.first_name AS teacher_firstname,
-        t.last_name AS teacher_lastname,
-        c.course_name AS name
-    FROM
-        ClassSchedule cs
-    JOIN
-        TeacherCourseAssignment tc
-    ON
-        tc.TeacherCourseID = cs.TeacherCourseID
-    JOIN
-        Teachers t
-    ON
-        tc.TeacherID = t.TeacherID
-    JOIN
-        courses c
-    ON
-        tc.CourseID = c.courseID
-    WHERE
-        cs.ClassID = ?`
-    :
-    `
-    SELECT DISTINCT
-        cl.class_name AS cl_name,
-        c.course_name AS name
-    FROM
-        ClassSchedule cs
-    JOIN
-        Class cl
-    ON
-        cl.ClassID = cs.ClassID
-    JOIN
-        TeacherCourseAssignment tc
-    ON
-        tc.TeacherCourseID = cs.TeacherCourseID
-    JOIN
-        courses c
-    ON
-        tc.CourseID = c.courseID
-    WHERE
-        tc.TeacherID = ?`
+    const query = "SELECT COUNT(*) AS totalStudents FROM students";
 
-    const queryID = req.session.usertype === "Student" ? req.session.classID : req.session.TeacherID;
-
-    db.query(query, [queryID], (err, courseData) => {
+    db.query(query, [], (err, totalStudentData) => {
         if (err) return res.json({ message: "Server Error" });
     
-        if (courseData.length > 0) {
-            return res.json(courseData);
+        if (totalStudentData.length > 0) {
+            return res.json(totalStudentData[0].totalStudents);
+        } else {
+            return res.json({});
+        }
+        });
+  });
+
+router.get("/data/totalTeachers", (req, res) => {
+    
+    const query = "SELECT COUNT(*) AS totalTeachers FROM teachers";
+
+    db.query(query, [], (err, totalTeacherData) => {
+        if (err) return res.json({ message: "Server Error" });
+    
+        if (totalTeacherData.length > 0) {
+            return res.json(totalTeacherData[0].totalTeachers);
         } else {
             return res.json({});
         }
@@ -63,4 +34,4 @@ router.get("/data", (req, res) => {
   });
   
   export default router;
-   */
+  

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const SchoolContext = createContext();
 
 function SchoolProvider({ children }) {
+  const [totalData, setTotalData] = useState({})
   const [userData, setUserdata] = useState({});
   const [classData, setClassData] = useState({});
   const [scheduleData, setScheduleData] = useState([]);
@@ -15,8 +16,10 @@ function SchoolProvider({ children }) {
     const fetchData = async () => {
       try {
         // Fetching data from different APIs
-        const [classDataRes, scheduleDataRes, courseDataRes, loginRes] =
+        const [totalStudentRes, totalTeacherRes, classDataRes, scheduleDataRes, courseDataRes, loginRes] =
           await Promise.all([
+            axios.get("http://localhost:8800/dashboard/data/totalStudents"),
+            axios.get("http://localhost:8800/dashboard/data/totalTeachers"),
             axios.get("http://localhost:8800/class/data"),
             axios.get("http://localhost:8800/schedule/data"),
             axios.get("http://localhost:8800/course/data"),
@@ -46,6 +49,7 @@ function SchoolProvider({ children }) {
         setScheduleData(scheduleDataRes.data);
         setClassData(classDataRes.data);
         setCourseData(courseDataRes.data);
+        setTotalData({Teachers: totalTeacherRes.data, Students: totalStudentRes.data});
       } catch (err) {
         console.error(err);
       }
@@ -56,7 +60,7 @@ function SchoolProvider({ children }) {
 
   return (
     <SchoolContext.Provider
-      value={{ classData, userData, scheduleData, courseData }}
+      value={{ classData, userData, scheduleData, courseData, totalData }}
     >
       {children}
     </SchoolContext.Provider>

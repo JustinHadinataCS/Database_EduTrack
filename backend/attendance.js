@@ -239,12 +239,5 @@ router.post("/data", async (req, res) => {
   }
 });
 
-router.post("/aaaaa", (req, res) => {
-  const receivedData = req.body; // Access the sent data
-  console.log('Received data:', receivedData);
-
-  // Send a response back to the client
-  res.status(200).json({ message: 'Data received successfully', data: receivedData });
-});
 
 export default router;

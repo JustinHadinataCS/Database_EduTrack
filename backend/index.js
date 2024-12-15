@@ -8,6 +8,7 @@ import loginRoutes from "./login.js";
 import classRoutes from "./class.js";
 import scheduleRoutes from "./schedule.js";
 import courseRoutes from "./course.js";
+import dashboardRoutes from "./dashboard.js"
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use("/class", classRoutes);
 app.use("/attendance", attendanceRoutes);
 app.use("/schedule", scheduleRoutes);
 app.use("/course", courseRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 app.listen(8800, () => {
   console.log("Connected to backend!");
